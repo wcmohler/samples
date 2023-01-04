@@ -1,6 +1,7 @@
 new_vm_name: not-a-vm
 env_name: Test Environment
 owner: BaconBill
+admin_public_ip: <YOUR_PUBLIC_IP_ADDRESS> # in the form of n.n.n.n/32 (CIDR format)
 vpc_id: <AWS_VPC_ID>
 subnet_id: <AWS_SUBNET_ID>
 created_by: BaconBill

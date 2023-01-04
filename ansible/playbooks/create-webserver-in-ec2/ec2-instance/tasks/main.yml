@@ -10,11 +10,11 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: <YOUR_PUBLIC_IP_ADDRESS>/32
+        cidr_ip: "{{ admin_public_ip }}"
       - proto: tcp
         from_port: 80
         to_port: 80
-        cidr_ip: <YOUR_PUBLIC_IP_ADDRESS>/32
+        cidr_ip: "{{ admin_public_ip }}"
     rules_egress:
       - proto: tcp
         from_port: 80
