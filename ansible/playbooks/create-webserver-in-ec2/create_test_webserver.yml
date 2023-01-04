@@ -30,5 +30,5 @@
     include_role:
       name: bacon-web
     vars:
-      public_ip: "{{ new_vm_pubip }}"
-      private_ip: "{{ new_vm_privip }}"
+      public_ip: "{{ lookup('file', '/home/centos/inv_newvm_pubip') }}"
+      private_ip: "{{ lookup('file', '/home/centos/inv_newvm_privip') }}"
