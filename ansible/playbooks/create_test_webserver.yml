@@ -1,0 +1,34 @@
+---
+# Playbook and roles written by William Mohler, aka BaconBill
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+    - ec2-instance
+
+  vars:
+    new_vm_pubip: "{{ lookup('file', '/home/centos/inv_newvm_pubip') }}"
+    new_vm_privip: "{{ lookup('file', '/home/centos/inv_newvm_privip') }}"
+  tasks:
+  - name: Add the new VM to inventory in the web_server group
+    add_host:
+      name: "{{ new_vm_pubip }}"
+      groups:
+        - web_server
+      with_items: "{{ new_vm_pubip }}"
+  - name: Show the IP just added to inventory
+    debug:
+      msg: "Public IP {{ new_vm_pubip }} added to invemtory"
+
+- hosts: web_server
+  gather_facts: true
+  tasks:
+  - name: Configure web server via the web-server role
+    include_role:
+      name: web-server
+  - name: Add BaconWeb content as /var/www/html/index.html
+    include_role:
+      name: bacon-web
+    vars:
+      public_ip: "{{ new_vm_pubip }}"
+      private_ip: "{{ new_vm_privip }}"

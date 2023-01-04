@@ -1,0 +1,11 @@
+new_vm_name: not-a-vm
+env_name: Test Environment
+owner: BaconBill
+vpc_id: <AWS_VPC_ID>
+subnet_id: <AWS_SUBNET_ID>
+created_by: BaconBill
+instance_type: t2.micro
+aws_region: <AWS_REGION>
+vm_image: <AWS_AMI_ID>
+ssh_key: <AWS_SSH_KEY>
+is_public_facing: yes

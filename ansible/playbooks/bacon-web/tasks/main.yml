@@ -1,0 +1,28 @@
+---
+
+- name: Check if index.html exists
+  stat:
+    path: /var/www/html/index.html
+    #path: /home/centos/index.html
+  register: file_result
+
+- name: Create the index.html file if it does not exist
+  copy:
+    dest: /var/www/html/index.html
+    #dest: /home/centos/index.html
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BaconBill's Ansible Goodness</title>
+      </head>
+      <body>
+        <h1>Hello. Welcome to BaconWeb</h1>
+        <p>The public IP address of this host is "{{ public_ip }}"</p>
+        <p>The private IP address of this host is "{{ private_ip }}"</p>
+      </body>
+      </html>
+  when: not file_result.stat.exists
+  become: yes

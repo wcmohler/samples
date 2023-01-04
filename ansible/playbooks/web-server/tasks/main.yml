@@ -1,0 +1,14 @@
+---
+
+- name: Install Apache (httpd) if not already installed
+  yum:
+    name: httpd
+    state: latest
+  become: true
+
+- name: Enable and start the httpd service
+  service:
+    name: httpd
+    enabled: yes
+    state: started
+  become: true

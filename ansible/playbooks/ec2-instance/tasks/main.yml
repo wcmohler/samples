@@ -1,0 +1,82 @@
+---
+
+- name: Security group for the web servers
+  ec2_group:
+    name: sg_webserver
+    description: Allow inbound ssh/http access from admin IPs and outbound http/https access globally
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ aws_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 216.24.67.4/32
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 216.24.67.4/32
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 52.215.9.154/32
+    rules_egress:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+    tags:
+      EnvName: "{{ env_name }}"
+      Owner: "{{ owner }}"
+      CreatedBy: "{{ created_by }}"
+  when: new_vm_name != "not-a-vm"
+  register: webserver_sg
+
+- name: Deploy the VM
+  ec2_instance:
+    name: "{{ new_vm_name }}"
+    vpc_subnet_id: "{{ subnet_id }}"
+    image_id: "{{ vm_image }}"
+    instance_type: "{{ instance_type }}"
+    key_name: "{{ ssh_key }}"
+    wait: yes
+    security_groups:
+      - "{{ webserver_sg.group_id }}"
+    network:
+      assign_public_ip: true
+    region: "{{ aws_region }}"
+    tags:
+      Name: "{{ new_vm_name }}"
+      EnvName: "{{ env_name }}"
+      Owner: "{{ owner }}"
+      CreatedBy: "{{ created_by }}"
+  when: new_vm_name != "not-a-vm"
+  register: webserver_instance
+
+#- name: Show new instance info
+  #debug:
+    #var: webserver_instance
+
+- name: Show new instance ID
+  debug:
+    var: webserver_instance.instances[0].instanceid
+
+- name: Gather and Save Instance Info
+  set_fact:
+    instance_name: "{{ webserver_instance.instances[0].tags.Name }}"
+    instance_id: "{{ webserver_instance.instances[0].instance_id }}"
+    public_ip: "{{ webserver_instance.instances[0].public_ip_address }}"
+    private_ip: "{{ webserver_instance.instances[0].private_ip_address }}"
+
+- name: Write the public IP to a temp file for inventory
+  copy:
+    dest: /home/centos/inv_newvm_pubip
+    content: "{{ public_ip }}"
+
+- name: Write the private IP to a temp file for inventory
+  copy:
+    dest: /home/centos/inv_newvm_privip
+    content: "{{ private_ip }}"
