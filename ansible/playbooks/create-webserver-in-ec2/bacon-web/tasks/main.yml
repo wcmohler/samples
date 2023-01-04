@@ -3,13 +3,11 @@
 - name: Check if index.html exists
   stat:
     path: /var/www/html/index.html
-    #path: /home/centos/index.html
   register: file_result
 
 - name: Create the index.html file if it does not exist
   copy:
     dest: /var/www/html/index.html
-    #dest: /home/centos/index.html
     content: |
       <!DOCTYPE html>
       <html lang="en">

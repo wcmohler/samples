@@ -18,3 +18,8 @@ Simply change the needed information (IN_ALL_CAPS) to use the information siecif
 
 Note that the playbook requires the `--extra-vars` portion in order to work properly. This "feature"
 is in place to enable you to run the playbook to create as many hosts as you desire.
+
+## Assumptions
+1. You have access to a VPC in AWS where you can create security groups and VMS.
+2. You have already configured access from your workstation to your VPC.
+
