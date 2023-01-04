@@ -10,15 +10,11 @@
       - proto: tcp
         from_port: 22
         to_port: 22
-        cidr_ip: 216.24.67.4/32
+        cidr_ip: <YOUR_PUBLIC_IP_ADDRESS>/32
       - proto: tcp
         from_port: 80
         to_port: 80
-        cidr_ip: 216.24.67.4/32
-      - proto: tcp
-        from_port: 22
-        to_port: 22
-        cidr_ip: 52.215.9.154/32
+        cidr_ip: <YOUR_PUBLIC_IP_ADDRESS>/32
     rules_egress:
       - proto: tcp
         from_port: 80
